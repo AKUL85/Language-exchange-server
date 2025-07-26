@@ -11,7 +11,8 @@ const app = express();
 // --------------------- Middlewares ---------------------
 app.use(cookieParser());
 app.use(cors({
-  origin: [' https://language-exchange-acb12.web.app','http://localhost:5174'], // frontend URL
+  origin: ['https://language-exchange-acb12.web.app', 'http://localhost:5174'],
+
   credentials: true
 }));
 app.use(express.json());
