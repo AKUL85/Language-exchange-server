@@ -70,7 +70,7 @@ async function run() {
     });
 
     // --------------------- Tutor Routes ---------------------
-    app.post('/tutors',  async (req, res) => {
+    app.post('/tutors', async (req, res) => {
       const tutorInfo = req.body;
       const result = await tutorCollections.insertOne(tutorInfo);
       res.send(result);
@@ -135,10 +135,30 @@ async function run() {
 
     // --------------------- Booked Items ---------------------
     app.post('/bokedItem', verifyToken, async (req, res) => {
-      const item = req.body;
-      const result = await bokedCollection.insertOne(item);
-      res.send(result);
+      try {
+        const { email, tutorId } = req.body;
+
+        if (!email || !tutorId) {
+          return res.status(400).send({ message: "Email and Tutor ID are required." });
+        }
+
+        
+        const existingBooking = await bokedCollection.findOne({ email, tutorId });
+
+        if (existingBooking) {
+          return res.status(409).send({ message: "You have already booked this tutor." });
+        }
+
+        
+        const result = await bokedCollection.insertOne(req.body);
+        res.status(201).send(result);
+
+      } catch (error) {
+        console.error("Booking error:", error);
+        res.status(500).send({ message: "Failed to book tutor", error: error.message });
+      }
     });
+
 
     app.get('/bokedItem', verifyToken, async (req, res) => {
       try {
