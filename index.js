@@ -11,7 +11,7 @@ const app = express();
 // --------------------- Middlewares ---------------------
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://localhost:5173'], // your frontend URL
+  origin: [' https://language-exchange-acb12.web.app','http://localhost:5174'], // frontend URL
   credentials: true
 }));
 app.use(express.json());
@@ -69,7 +69,7 @@ async function run() {
     });
 
     // --------------------- Tutor Routes ---------------------
-    app.post('/tutors', verifyToken, async (req, res) => {
+    app.post('/tutors',  async (req, res) => {
       const tutorInfo = req.body;
       const result = await tutorCollections.insertOne(tutorInfo);
       res.send(result);
